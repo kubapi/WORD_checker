@@ -10,9 +10,9 @@ from selenium.webdriver.common.keys import Keys
 # used in make beep function to make sound 
 import winsound
 import time
-import datetime
 import os
 
+# hiding console logs from webdrive manager
 os.environ['WDM_LOG_LEVEL'] = '0'
 
 def make_beep():
@@ -24,7 +24,6 @@ def make_beep():
 
 def text_to_date(text):
     return int(text.split(" ")[1].split(".")[0])
- 
 
 def wait_for_clickable_and_click(driver, xpath, timeout = 20):
     element = WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((By.XPATH, xpath)))
@@ -89,6 +88,8 @@ while(True):
             current_best = result
             make_beep()
             print("Znalezione! Stonks! 🍅")
+        # wait for half a minute after each try
         time.sleep(30)
     except:
+        # if failed try waiting for a minute
         time.sleep(60)
