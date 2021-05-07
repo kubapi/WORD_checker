@@ -11,7 +11,9 @@ from selenium.webdriver.common.keys import Keys
 import winsound
 import time
 import datetime
+import os
 
+os.environ['WDM_LOG_LEVEL'] = '0'
 
 def make_beep():
     frequency = 2500
@@ -57,16 +59,15 @@ def get_status(email, password):
     #select practical exam (using js executor to overpass)
     time.sleep(2)
     driver.find_element_by_xpath("//*[@id='practical-container']/input").send_keys(Keys.ENTER);
-    time.sleep(2)
-
     result = driver.find_element_by_xpath("//*[@id='ngb-panel-0-header']/div[2]/h5").text
-    driver.close()
+
+    driver.quit()
     return text_to_date(result)
 
 def login():
     print("Dane wymagane są do zalogowania się na stronie! Nie martw się nigdzie nie są przechowywane.")
-    email = input("Podaj email do swojego konta:")
-    password = input("Podaj hasło do swojego konta:")
+    email = input("📧 Podaj email do swojego konta: ")
+    password = input("🔒 Podaj hasło do swojego konta: ")
     return email, password
 
 # get login details
@@ -76,16 +77,18 @@ current_best = 22
 # setup webdriver with loggin switch excluded 
 options = webdriver.ChromeOptions() 
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
-driver = webdriver.Chrome(ChromeDriverManager().install(), options = options)
+# uses headless browser
+options.add_argument("--headless")
 
 while(True):
     try:
+        driver = webdriver.Chrome(ChromeDriverManager().install(), options = options)
         result = get_status(email, password)
+        print(result)
         if current_best > result:
             current_best = result
             make_beep()
-            print("New best found! Go reserve it!")
-        else:
-            print("Not found!")
+            print("Znalezione! Stonks! 🍅")
+        time.sleep(30)
     except:
         time.sleep(60)
