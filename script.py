@@ -84,5 +84,8 @@ while(True):
         if current_best > result:
             current_best = result
             make_beep()
+            print("New best found! Go reserve it!")
+        else:
+            print("Not found!")
     except:
         time.sleep(60)
